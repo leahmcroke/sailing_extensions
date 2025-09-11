@@ -1,7 +1,7 @@
 import asyncio
+import boat_secrets
 import json
 import requests
-import boat_secrets
 import websockets
 
 BOAT_KEY = boat_secrets.boat_key
@@ -48,7 +48,7 @@ async def webSocket():
     
 
 def main():
-    asyncio.run(webSocket())
-    # getData()
+    # asyncio.run(webSocket())
+    getData()
     
 main()
