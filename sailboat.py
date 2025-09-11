@@ -1,12 +1,17 @@
-import requests
 import asyncio
+import json
+import requests
+import boat_secrets
 import websockets
+
+BOAT_KEY = boat_secrets.boat_key
+RACE_ID = boat_secrets.race_id
 
 def changeDirection():
     userInput = input("Input new Direction: ")
 
     newDirectionPost = {
-        'key': 'e31096543ca32b74facde4a059828b69',
+        'key': BOAT_KEY,
         'cmd': 'course',
         'value': userInput
     }
@@ -18,7 +23,7 @@ def changeDirection():
 
 def getData():
     boatkey = {
-        'key': 'e31096543ca32b74facde4a059828b69',
+        'key': BOAT_KEY
     }
 
     response = requests.get('https://8bitbyte.ca/sailnavsim/api/boatinfo.php', boatkey)
@@ -27,19 +32,23 @@ def getData():
 
 async def webSocket():
     boatkey = {
-        'key': 'e31096543ca32b74facde4a059828b69',
+        'key': BOAT_KEY,
         'cmd': 'bdl'
     }
     
-    async with websockets.connect('https://8bitbyte.ca/sailnavsim/snsws/v1/ws') as websocket:
+    boatkey = json.dumps(boatkey)
+
+    async with websockets.connect('wss://8bitbyte.ca/sailnavsim/snsws/v1/ws') as websocket:
         await websocket.send(boatkey)
-        response = await websocket.recv()
-        print(f"Received: {response}")
+        while True:
+            response = await websocket.recv()
+            print(f"Received: {response}")
     
     #response = requests.post('https://8bitbyte.ca/sailnavsim/snsws/v1/ws', boatkey)
     
 
 def main():
     asyncio.run(webSocket())
+    # getData()
     
 main()
