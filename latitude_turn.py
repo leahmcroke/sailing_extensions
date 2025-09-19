@@ -6,8 +6,8 @@ import time
 import websockets
 
 BOAT_KEY = boat_secrets.boat_key
-LATITUDE = 19.92
-NEW_COURSE = 210
+LATITUDE = -0.751391
+NEW_COURSE = 270
 
 def change_direction(course):
 
